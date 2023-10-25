@@ -13,9 +13,10 @@
 .idea
 
 #.env
-.env
+../.env
 **/env/
 **/venv/
+.env
 
 blog-378716-2a072e88e2a6.json
 certs.json
