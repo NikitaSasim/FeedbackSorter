@@ -1,0 +1,23 @@
+# Sensitive files
+.DS_Store
+
+# Django
+**/__pycache__/
+**/migrations/
+*.log
+*.pyc
+*.sqlite3
+*.pot
+
+#idea
+.idea
+
+#.env
+.env
+**/env/
+**/venv/
+
+blog-378716-2a072e88e2a6.json
+certs.json
+
+cache/
