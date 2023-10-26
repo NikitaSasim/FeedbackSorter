@@ -49,24 +49,38 @@ def get_feedbacks(date_from, date_to):
     headers = {
         "Authorization": apiKey
     }
+    skip = -50
+    response_len = 50
+    feedbacks = []
 
-    params = {
-        "isAnswered": "true",
-        "take": 80,
-        "skip": 0,
-        "dateFrom": date_from,
-        "dateTo": date_to
-    }
+    while response_len == 50:
+        skip += 50
+        params = {
+            "isAnswered": "true",
+            "take": 50,
+            "skip": skip,
+            "dateFrom": date_from,
+            "dateTo": date_to
+        }
 
-    response = requests.get(getFeedbacksUrl, params=params, headers=headers)
-    # return response.json().data.feedbacks
-    feedbacks = response.json()['data']['feedbacks']
+        response = requests.get(getFeedbacksUrl, params=params, headers=headers).json()['data']['feedbacks']
+        response_len = len(response)
+
+        if response_len > 0:
+            feedbacks += response
     return feedbacks
 
+def sort(feedbacks):
 
-for feefback in get_feedbacks(get_dates()['date_from'], get_dates()['date_to']):
-    print(f"{feefback['createdDate']}    {feefback['id']}")
+    for feefback in feedbacks:
+
+        if len(feefback['text']) == 0:
+            print(f"{feefback['createdDate']}    {feefback['id']}  {feefback['productValuation']}")
+        else:
+            print(f"{feefback['createdDate']}    {feefback['id']}  {feefback['text']}")
 # print(getFeedbacks())
 
+
+sort(get_feedbacks(get_dates()['date_from'], get_dates()['date_to']))
 
 
