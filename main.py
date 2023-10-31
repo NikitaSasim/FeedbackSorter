@@ -115,6 +115,7 @@ def sort_by_ai(text, valuation):
 
     return [response1.choices[0].message.content, response2.choices[0].message.content]
 
+
 def sort(feedbacks):
 
     for feefback in feedbacks:
