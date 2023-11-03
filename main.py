@@ -117,20 +117,55 @@ def sort_by_ai(text, valuation):
 
 
 def sort(feedbacks):
+    url = api_key = os.getenv('RESPONDER_URL')
+    headers = {'auth': os.getenv('RESPONDER_API_KEY')}
 
-    for feefback in feedbacks:
+    for feedback in feedbacks:
 
-        if len(feefback['text']) == 0:
-            print(f"{feefback['createdDate']}    {feefback['id']}  {feefback['productValuation']}")
+        if len(feedback['text']) == 0:
+            data = {
+                'id': feedback['id'],
+                'text': feedback['text'],
+                'productValuation': feedback['productValuation'],
+                'createdDate': feedback['createdDate'],
+                'nmId': feedback['productDetails']['nmId'],
+                'productName': feedback['productDetails']['productName'],
+                'supplierArticle': feedback['productDetails']['supplierArticle'],
+                'size': feedback['productDetails']['size'],
+                'photoLinks': feedback['photoLinks'],
+                'tech': '0',
+                'constr': '0',
+                'strategy': '0',
+                'positive': '0'
+            }
+
         else:
-            print(f"\n{feefback['createdDate']}    {feefback['id']}   {feefback['productValuation']}  {feefback['text']}\n")
-            result = sort_by_ai(feefback['text'], feefback['productValuation'])
+
+            result = sort_by_ai(feedback['text'], feedback['productValuation'])
 
             refs = json.loads(result[0].replace("'", ""))
-            print(refs)
+            # print(refs)
 
             positive = json.loads(result[1].replace("'", ""))
-            print(positive)
+            # print(positive)
+
+            data = {
+                'id': feedback['id'],
+                'text': feedback['text'],
+                'productValuation': feedback['productValuation'],
+                'createdDate': feedback['createdDate'],
+                'nmId': feedback['productDetails']['nmId'],
+                'productName': feedback['productDetails']['productName'],
+                'supplierArticle': feedback['productDetails']['supplierArticle'],
+                'size': feedback['productDetails']['size'],
+                'photoLinks': feedback['photoLinks'],
+                'tech': refs['tech'],
+                'constr': refs['constr'],
+                'strategy': refs['strategy'],
+                'positive': positive['positive']
+            }
+
+        response = requests.post(url, data=data, headers=headers)
 
 
 sort(get_feedbacks(get_dates()['date_from'], get_dates()['date_to']))
