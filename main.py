@@ -60,7 +60,7 @@ def get_feedbacks(date_from, date_to):
     while response_len == 50:
         skip += 50
         params = {
-            "isAnswered": "true",
+            "isAnswered": "false",
             "take": 50,
             "skip": skip,
             "dateFrom": date_from,
@@ -117,11 +117,11 @@ def sort_by_ai(text, valuation):
 
 
 def sort(feedbacks):
-    url = api_key = os.getenv('RESPONDER_URL')
+    url = os.getenv('RESPONDER_URL')
     headers = {'auth': os.getenv('RESPONDER_API_KEY')}
 
     for feedback in feedbacks:
-
+        print(feedback)
         if len(feedback['text']) == 0:
             data = {
                 'id': feedback['id'],
@@ -152,6 +152,7 @@ def sort(feedbacks):
 
             data = {
                 'id': feedback['id'],
+                'userName': feedback['userName'],
                 'text': feedback['text'],
                 'productValuation': feedback['productValuation'],
                 'createdDate': feedback['createdDate'],
@@ -167,6 +168,8 @@ def sort(feedbacks):
             }
 
         response = requests.post(url, data=data, headers=headers)
+        print(response.status_code)
+        print('')
 
 
 sort(get_feedbacks(get_dates()['date_from'], get_dates()['date_to']))
