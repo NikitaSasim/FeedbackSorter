@@ -125,6 +125,7 @@ def sort(feedbacks):
         if len(feedback['text']) == 0:
             data = {
                 'id': feedback['id'],
+                'userName': feedback['userName'],
                 'text': feedback['text'],
                 'productValuation': feedback['productValuation'],
                 'createdDate': feedback['createdDate'],
