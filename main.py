@@ -1,18 +1,16 @@
 import json
 import os
-from dotenv import load_dotenv
 import requests
 import openai
 from datetime import datetime, timezone, timedelta
 
-load_dotenv()
 
 
 getFeedbacksUrl = 'https://feedbacks-api.wildberries.ru/api/v1/feedbacks'
 
-api_key = os.getenv('WB_API_KEY')
+api_key = os.environ['WB_API_KEY']
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 def get_dates():
     today = datetime.now(timezone.utc)
@@ -46,7 +44,7 @@ def get_dates():
     return dates
 
 
-print(get_dates())
+# print(get_dates())
 
 
 def get_feedbacks(date_from, date_to):
@@ -117,11 +115,11 @@ def sort_by_ai(text, valuation):
 
 
 def sort(feedbacks):
-    url = os.getenv('RESPONDER_URL')
-    headers = {'auth': os.getenv('RESPONDER_API_KEY')}
+    url = os.environ['RESPONDER_URL']
+    headers = {'auth': os.environ['RESPONDER_API_KEY']}
 
     for feedback in feedbacks:
-        print(feedback)
+        # print(feedback)
         if len(feedback['text']) == 0:
             data = {
                 'id': feedback['id'],
@@ -168,10 +166,10 @@ def sort(feedbacks):
             }
 
         response = requests.post(url, data=data, headers=headers)
-        print(response.status_code)
-        print('')
+        # print(response.status_code)
+        # print('')
 
 
-sort(get_feedbacks(get_dates()['date_from'], get_dates()['date_to']))
+
 
 
